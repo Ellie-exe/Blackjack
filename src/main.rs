@@ -203,17 +203,17 @@ fn build_prompt_str(mut string: String, state: &State) -> String {
 
     let width_len: i8 = get_widest_row(&state) - (16 + balance_len + prompt_len);
 
-    let balance_str: &str = &get_dash_str(balance_len)[..];
-    let prompt_str: &str = &get_dash_str(prompt_len)[..];
+    let balance_str: &str = &get_dash_str(balance_len);
+    let prompt_str: &str = &get_dash_str(prompt_len);
 
-    let space_str: &str = &get_space_str(width_len)[..];
-    let dash_str: &str = &get_dash_str(width_len)[..];
+    let space_str: &str = &get_space_str(width_len);
+    let dash_str: &str = &get_dash_str(width_len);
 
-    string += &format!("┌──────────{}─┬─{}{}─┐\n", balance_str, prompt_str, dash_str)[..];
-    string += &format!("│ Balance: {} │ {}{} │\n", state.balance, prompt, space_str)[..];
-    string += &format!("└──────────{}─┴─{}{}─┘", balance_str, prompt_str, dash_str)[..];
+    string += &format!("┌──────────{}─┬─{}{}─┐\n", balance_str, prompt_str, dash_str);
+    string += &format!("│ Balance: {} │ {}{} │\n", state.balance, prompt, space_str);
+    string += &format!("└──────────{}─┴─{}{}─┘", balance_str, prompt_str, dash_str);
 
-    string += &format!("\x1b[1F\x1b[{}C", (15 + balance_len + prompt_len))[..];
+    string += &format!("\x1b[1F\x1b[{}C", (15 + balance_len + prompt_len));
 
     string
 }
@@ -227,20 +227,20 @@ fn build_table_str(mut string: String, state: &State) -> String {
     string += "\x1b[26F\x1b[0J";
 
     add_header(&mut string, width, "Dealer's cards:");
-    add_header(&mut string, width, &format!("Value = {}", dealer_value)[..]);
+    add_header(&mut string, width, &format!("Value = {}", dealer_value));
     add_cards(&mut string, width, &state.dealer_hand);
 
     string += "\n";
 
     add_header(&mut string, width, "Player's cards:");
-    add_header(&mut string, width, &format!("Value = {}", player_value)[..]);
+    add_header(&mut string, width, &format!("Value = {}", player_value));
     add_cards(&mut string, width, &state.player_hand);
 
     string
 }
 
 fn add_header(string: &mut String, width: i8, header: &str) {
-    string.push_str(&get_space_str((width - header.len() as i8) / 2)[..]);
+    string.push_str(&get_space_str((width - header.len() as i8) / 2));
     string.push_str(header);
     string.push_str("\n");
 }
@@ -249,10 +249,10 @@ fn add_cards(string: &mut String, width: i8, hand: &Vec<Card>) {
     let cards_width: i8 = (hand.len() as i8 * 14) - 1;
 
     for row in 0..9 {
-        string.push_str(&get_space_str((width - cards_width) / 2)[..]);
+        string.push_str(&get_space_str((width - cards_width) / 2));
 
         for card in hand {
-            string.push_str(&get_card_row(card, row)[..]);
+            string.push_str(&get_card_row(card, row));
             string.push_str(" ");
         }
 
