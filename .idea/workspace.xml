@@ -12,7 +12,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Separated formatted string">
+    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Made add functions take ownership">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
@@ -101,7 +101,7 @@
       <workItem from="1655340734621" duration="10000" />
       <workItem from="1655340764161" duration="253000" />
       <workItem from="1655341019668" duration="3890000" />
-      <workItem from="1655392890149" duration="6453000" />
+      <workItem from="1655392890149" duration="8200000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic win detection">
       <created>1655340662709</created>
@@ -166,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655396815238</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Made add functions take ownership">
+      <created>1655399675753</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1655399675753</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,6 +199,7 @@
     <MESSAGE value="Fixed top and bottom rank string" />
     <MESSAGE value="Cleaned up code" />
     <MESSAGE value="Separated formatted string" />
-    <option name="LAST_COMMIT_MESSAGE" value="Separated formatted string" />
+    <MESSAGE value="Made add functions take ownership" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made add functions take ownership" />
   </component>
 </project>

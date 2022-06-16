@@ -10,6 +10,7 @@ struct Card {
 }
 
 struct State {
+    bet: i32,
     balance: i32,
     deck: Vec<Card>,
     dealer_hand: Vec<Card>,
@@ -21,7 +22,16 @@ fn main() {
     let mut balance: i32 = 0;
 
     loop {
+        print!("Bet amount? ");
+        io::stdout().flush().unwrap();
+
+        let mut bet: String = String::new();
+        io::stdin().read_line(&mut bet).unwrap();
+
+        let bet: i32 = bet.trim().parse::<i32>().unwrap();
+
         let mut state = State {
+            bet,
             balance,
             deck: Vec::new(),
             dealer_hand: Vec::new(),
@@ -34,14 +44,6 @@ fn main() {
         deal(&mut state.dealer_hand, &mut state.deck, 2);
 
         state.dealer_hand.last_mut().unwrap().flip = false;
-
-        print!("Bet amount? ");
-        io::stdout().flush().unwrap();
-
-        let mut bet: String = String::new();
-        io::stdin().read_line(&mut bet).unwrap();
-
-        let bet: i32 = bet.trim().parse::<i32>().unwrap();
 
         for _ in 0..27 {
             println!();
@@ -77,56 +79,12 @@ fn main() {
             }
         }
 
-        state.dealer_hand.last_mut().unwrap().flip = true;
+        settle(&mut state);
 
-        if get_hand_value(&state.player_hand) <= 21 {
-            while get_hand_value(&state.dealer_hand) < 17 {
-                deal(&mut state.dealer_hand, &mut state.deck, 1);
-                if get_hand_value(&state.player_hand) > 21 { break };
-            }
-        }
+        let mut input: String = String::new();
+        io::stdin().read_line(&mut input).unwrap();
 
-        let table_str: String = String::new();
-        println!("{}", build_table_str(table_str, &state));
-
-        let player_value: i8 = get_hand_value(&state.player_hand);
-        let dealer_value: i8 = get_hand_value(&state.dealer_hand);
-
-        if player_value > 21 {
-            state.balance -= bet;
-
-            let prompt_str: String = String::from("You bust! Deal?");
-            print!("{}", build_prompt_str(prompt_str, &state));
-
-        } else if dealer_value > 21 {
-            state.balance += bet;
-
-            let prompt_str: String = String::from("Dealer bust! Deal?");
-            print!("{}", build_prompt_str(prompt_str, &state));
-
-        } else if player_value < dealer_value {
-            state.balance -= bet;
-
-            let prompt_str: String = String::from("You lose! Deal?");
-            print!("{}", build_prompt_str(prompt_str, &state));
-
-        } else if player_value > dealer_value {
-            state.balance += bet;
-
-            let prompt_str: String = String::from("You win! Deal?");
-            print!("{}", build_prompt_str(prompt_str, &state));
-
-        } else if player_value == dealer_value {
-            let prompt_str: String = String::from("You draw! Deal?");
-            print!("{}", build_prompt_str(prompt_str, &state));
-        }
-
-        io::stdout().flush().unwrap();
-
-        let mut response: String = String::new();
-        io::stdin().read_line(&mut response).unwrap();
-
-        match response.to_lowercase().chars().next().unwrap() {
+        match input.to_lowercase().chars().next().unwrap() {
             'y' => {
                 println!("\x1b[29F\x1b[0J");
                 balance = state.balance;
@@ -169,6 +127,54 @@ fn deal(hand: &mut Vec<Card>, deck: &mut Vec<Card>, num_cards: i8) {
             None => return
         }
     }
+}
+
+fn settle(state: &mut State) {
+    state.dealer_hand.last_mut().unwrap().flip = true;
+
+    if get_hand_value(&state.player_hand) <= 21 {
+        while get_hand_value(&state.dealer_hand) < 17 {
+            deal(&mut state.dealer_hand, &mut state.deck, 1);
+            if get_hand_value(&state.player_hand) > 21 { break };
+        }
+    }
+
+    let table_str: String = String::new();
+    println!("{}", build_table_str(table_str, &state));
+
+    let player_value: i8 = get_hand_value(&state.player_hand);
+    let dealer_value: i8 = get_hand_value(&state.dealer_hand);
+
+    if player_value > 21 {
+        state.balance -= state.bet;
+
+        let prompt_str: String = String::from("You bust! Deal?");
+        print!("{}", build_prompt_str(prompt_str, &state));
+
+    } else if dealer_value > 21 {
+        state.balance += state.bet;
+
+        let prompt_str: String = String::from("Dealer bust! Deal?");
+        print!("{}", build_prompt_str(prompt_str, &state));
+
+    } else if player_value < dealer_value {
+        state.balance -= state.bet;
+
+        let prompt_str: String = String::from("You lose! Deal?");
+        print!("{}", build_prompt_str(prompt_str, &state));
+
+    } else if player_value > dealer_value {
+        state.balance += state.bet;
+
+        let prompt_str: String = String::from("You win! Deal?");
+        print!("{}", build_prompt_str(prompt_str, &state));
+
+    } else if player_value == dealer_value {
+        let prompt_str: String = String::from("You draw! Deal?");
+        print!("{}", build_prompt_str(prompt_str, &state));
+    }
+
+    io::stdout().flush().unwrap();
 }
 
 fn get_hand_value(hand: &Vec<Card>) -> i8 {
