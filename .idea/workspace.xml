@@ -12,7 +12,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="">
+    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Removed extraneous [..]">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
@@ -100,7 +100,7 @@
       <workItem from="1655340714791" duration="18000" />
       <workItem from="1655340734621" duration="10000" />
       <workItem from="1655340764161" duration="253000" />
-      <workItem from="1655341019668" duration="553000" />
+      <workItem from="1655341019668" duration="1361000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic win detection">
       <created>1655340662709</created>
@@ -130,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655340993269</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Removed extraneous [..]">
+      <created>1655341694725</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1655341694725</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,6 +159,7 @@
     <MESSAGE value="More changes?" />
     <MESSAGE value="Why does this keep changing?" />
     <MESSAGE value="Removed extraneous code" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed extraneous code" />
+    <MESSAGE value="Removed extraneous [..]" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed extraneous [..]" />
   </component>
 </project>
