@@ -12,9 +12,8 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Added .idea to .gitignore">
+    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +28,9 @@
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="2zbbwlhx" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2AUNhyqIXeHjLQjciho4BSWwi2h" />
   <component name="ProjectViewState">
@@ -82,10 +84,53 @@
       <option name="presentableId" value="Default" />
       <updated>1655060326370</updated>
       <workItem from="1655060327455" duration="70000" />
+      <workItem from="1655340584845" duration="86000" />
+      <workItem from="1655340673175" duration="40000" />
+      <workItem from="1655340714791" duration="18000" />
+      <workItem from="1655340734621" duration="10000" />
     </task>
+    <task id="LOCAL-00001" summary="Added basic win detection">
+      <created>1655340662709</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1655340662709</updated>
+    </task>
+    <task id="LOCAL-00002" summary="More changes?">
+      <created>1655340706467</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1655340706467</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Why does this keep changing?">
+      <created>1655340726389</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1655340726389</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added basic win detection" />
+    <MESSAGE value="More changes?" />
+    <MESSAGE value="Why does this keep changing?" />
+    <option name="LAST_COMMIT_MESSAGE" value="Why does this keep changing?" />
   </component>
 </project>
