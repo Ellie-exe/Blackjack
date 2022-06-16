@@ -53,6 +53,10 @@ fn main() {
             let table_str: String = String::new();
             println!("{}", build_table_str(table_str, &state));
 
+            if state.player_hand.len() == 2 && get_hand_value(&state.player_hand) == 21 {
+                break;
+            }
+
             let prompt_str: String = String::from(">");
             print!("{}", build_prompt_str(prompt_str, &state));
             io::stdout().flush().unwrap();
@@ -145,7 +149,35 @@ fn settle(state: &mut State) {
     let player_value: i8 = get_hand_value(&state.player_hand);
     let dealer_value: i8 = get_hand_value(&state.dealer_hand);
 
-    if player_value > 21 {
+    let player_natural: bool = state.player_hand.len() == 2 && player_value == 21;
+    let dealer_natural: bool;
+
+    let dealer_ace_or_ten: bool = state.dealer_hand[0].rank == 0 || state.dealer_hand[0].rank == 9;
+
+    if state.dealer_hand.len() == 2 && dealer_ace_or_ten {
+        dealer_natural = state.dealer_hand.len() == 2 && player_value == 21;
+
+    } else {
+        dealer_natural = false;
+    }
+
+    if  player_natural == true && dealer_natural == false {
+        state.balance += state.bet + (state.bet / 2);
+
+        let prompt_str: String = String::from("You blackjack! Deal?");
+        print!("{}", build_prompt_str(prompt_str, &state));
+
+    } else if dealer_natural == true && player_natural == false {
+        state.balance -= state.bet;
+
+        let prompt_str: String = String::from("Dealer blackjack! Deal?");
+        print!("{}", build_prompt_str(prompt_str, &state));
+
+    } else if player_natural == true && dealer_natural == true {
+        let prompt_str: String = String::from("You draw! Deal?");
+        print!("{}", build_prompt_str(prompt_str, &state));
+
+    } else if player_value > 21 {
         state.balance -= state.bet;
 
         let prompt_str: String = String::from("You bust! Deal?");
