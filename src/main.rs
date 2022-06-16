@@ -239,7 +239,7 @@ fn build_prompt_str(mut string: String, state: &State) -> String {
     let balance_len: i8 = state.balance.to_string().len() as i8;
     let prompt_len: i8 = prompt.len() as i8;
 
-    let width_len: i8 = get_widest_row(&state) - (16 + balance_len + prompt_len);
+    let width_len: i8 = get_widest_row(&state) - (18 + balance_len + prompt_len);
 
     let balance_str: &str = &get_dash_str(balance_len);
     let prompt_str: &str = &get_dash_str(prompt_len);
@@ -247,9 +247,9 @@ fn build_prompt_str(mut string: String, state: &State) -> String {
     let space_str: &str = &get_space_str(width_len);
     let dash_str: &str = &get_dash_str(width_len);
 
-    string += &format!("┌──────────{}─┬─{}{}─┐\n", balance_str, prompt_str, dash_str);
-    string += &format!("│ Balance: {} │ {}{} │\n", state.balance, prompt, space_str);
-    string += &format!("└──────────{}─┴─{}{}─┘", balance_str, prompt_str, dash_str);
+    string += &format!("┌──────────{}─┬─{}──{}─┐\n", balance_str, prompt_str, dash_str);
+    string += &format!("│ Balance: {} │ {}  {} │\n", state.balance, prompt, space_str);
+    string += &format!("└──────────{}─┴─{}──{}─┘", balance_str, prompt_str, dash_str);
 
     string += &format!("\x1b[1F\x1b[{}C", 15 + balance_len + prompt_len);
 
