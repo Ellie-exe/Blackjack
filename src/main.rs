@@ -275,11 +275,8 @@ fn get_card_row(card: &Card, row: usize) -> String {
     let color: &str = if card.suit < 2 { "\x1b[1;31m" } else { "\x1b[1;90m" };
     let reset: &str = "\x1b[0m";
 
-    let mut top_rank: String = rank.to_string();
-    let mut bottom_rank: String = rank.to_string();
-
-    if card.rank != 9 { top_rank = format!("{} ", rank); }
-    if card.rank != 9 { bottom_rank = format!(" {}", rank); }
+    let top_rank: String = if card.rank == 9 { rank.to_string() } else { format!("{} ", rank) };
+    let bottom_rank: String = if card.rank == 9 { rank.to_string() } else { format!(" {}", rank) };
 
     face_str[0] = format!("│ {}{}      {}{} │", color, top_rank, suit, reset);
     face_str[1] = format!("│ {}         {} │", color, reset);
