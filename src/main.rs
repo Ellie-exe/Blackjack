@@ -213,7 +213,7 @@ fn build_prompt_str(mut string: String, state: &State) -> String {
     string += &format!("│ Balance: {} │ {}{} │\n", state.balance, prompt, space_str);
     string += &format!("└──────────{}─┴─{}{}─┘", balance_str, prompt_str, dash_str);
 
-    string += &format!("\x1b[1F\x1b[{}C", (15 + balance_len + prompt_len));
+    string += &format!("\x1b[1F\x1b[{}C", 15 + balance_len + prompt_len);
 
     string
 }
@@ -226,83 +226,84 @@ fn build_table_str(mut string: String, state: &State) -> String {
 
     string += "\x1b[26F\x1b[0J";
 
-    add_header(&mut string, width, "Dealer's cards:");
-    add_header(&mut string, width, &format!("Value = {}", dealer_value));
-    add_cards(&mut string, width, &state.dealer_hand);
+    string = build_header_str(string, width, "Dealer's cards:");
+    string = build_header_str(string, width, &format!("Value = {}", dealer_value));
+    string = build_card_str(string, width, &state.dealer_hand);
 
     string += "\n";
 
-    add_header(&mut string, width, "Player's cards:");
-    add_header(&mut string, width, &format!("Value = {}", player_value));
-    add_cards(&mut string, width, &state.player_hand);
+    string = build_header_str(string, width, "Player's cards:");
+    string = build_header_str(string, width, &format!("Value = {}", player_value));
+    string = build_card_str(string, width, &state.player_hand);
 
     string
 }
 
-fn add_header(string: &mut String, width: i8, header: &str) {
-    string.push_str(&get_space_str((width - header.len() as i8) / 2));
-    string.push_str(header);
-    string.push_str("\n");
+fn build_header_str(mut string: String, width: i8, header: &str) -> String {
+    string += &get_space_str((width - header.len() as i8) / 2);
+    string += header;
+    string += "\n";
+
+    string
 }
 
-fn add_cards(string: &mut String, width: i8, hand: &Vec<Card>) {
+fn build_card_str(mut string: String, width: i8, hand: &Vec<Card>) -> String {
     let cards_width: i8 = (hand.len() as i8 * 14) - 1;
 
     for row in 0..9 {
-        string.push_str(&get_space_str((width - cards_width) / 2));
+        string += &get_space_str((width - cards_width) / 2);
 
         for card in hand {
-            string.push_str(&get_card_row(card, row));
-            string.push_str(" ");
+            string = build_card_row_str(string, card, row);
+            string += " ";
         }
 
-        string.push_str("\n");
+        string += "\n";
     }
+
+    string
 }
 
-fn get_card_row(card: &Card, row: usize) -> String {
-    const RANKS: [&str; 13] = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-    const SUITS: [&str; 4] = ["♥", "♦", "♠", "♣"];
-
+fn build_card_row_str(mut string: String, card: &Card, row: usize) -> String {
     const NEW_STRING: String = String::new();
-
     let mut card_str: [String; 9] = [NEW_STRING; 9];
-    let mut face_str: [String; 7] = [NEW_STRING; 7];
-
-    let rank: &str = RANKS[card.rank as usize];
-    let suit: &str = SUITS[card.suit as usize];
-
-    let color: &str = if card.suit < 2 { "\x1b[1;31m" } else { "\x1b[1;90m" };
-    let reset: &str = "\x1b[0m";
-
-    let top_rank_formatted: String = format!("{} ", rank);
-    let bottom_rank_formatted: String = format!(" {}", rank);
-
-    let top_rank: &str = if card.rank == 9 { rank } else { &top_rank_formatted };
-    let bottom_rank: &str = if card.rank == 9 { rank } else { &bottom_rank_formatted };
-
-    face_str[0] = format!("│ {}{}      {}{} │", color, top_rank, suit, reset);
-    face_str[1] = format!("│ {}         {} │", color, reset);
-    face_str[2] = format!("│ {}         {} │", color, reset);
-    face_str[3] = format!("│ {}    {}    {} │", color, suit, reset);
-    face_str[4] = format!("│ {}         {} │", color, reset);
-    face_str[5] = format!("│ {}         {} │", color, reset);
-    face_str[6] = format!("│ {}{}      {}{} │", color, suit, bottom_rank, reset);
 
     card_str[0] = String::from("┌───────────┐");
+    card_str[8] = String::from("└───────────┘");
 
-    for i in 1..8 {
-        if card.flip == true {
-            card_str[i] = face_str[i - 1].clone();
+    if card.flip == true {
+        const RANKS: [&str; 13] = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+        const SUITS: [&str; 4] = ["♥", "♦", "♠", "♣"];
 
-        } else {
+        let rank: &str = RANKS[card.rank as usize];
+        let suit: &str = SUITS[card.suit as usize];
+
+        let color: &str = if card.suit < 2 { "\x1b[1;31m" } else { "\x1b[1;90m" };
+        let reset: &str = "\x1b[0m";
+
+        let top_rank_formatted: String = format!("{} ", rank);
+        let bottom_rank_formatted: String = format!(" {}", rank);
+
+        let top_rank: &str = if card.rank == 9 { rank } else { &top_rank_formatted };
+        let bottom_rank: &str = if card.rank == 9 { rank } else { &bottom_rank_formatted };
+
+        card_str[1] = format!("│ {}{}      {}{} │", color, top_rank, suit, reset);
+        card_str[2] = format!("│ {}         {} │", color, reset);
+        card_str[3] = format!("│ {}         {} │", color, reset);
+        card_str[4] = format!("│ {}    {}    {} │", color, suit, reset);
+        card_str[5] = format!("│ {}         {} │", color, reset);
+        card_str[6] = format!("│ {}         {} │", color, reset);
+        card_str[7] = format!("│ {}{}      {}{} │", color, suit, bottom_rank, reset);
+
+    } else if card.flip == false {
+        for i in 1..8 {
             card_str[i] = String::from("│ ░░░░░░░░░ │");
         }
     }
 
-    card_str[8] = String::from("└───────────┘");
+    string += &card_str[row];
 
-    card_str[row].clone()
+    string
 }
 
 fn get_space_str(num: i8) -> String {
