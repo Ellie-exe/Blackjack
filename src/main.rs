@@ -214,7 +214,10 @@ fn get_hand_value(hand: &Vec<Card>) -> i8 {
     let mut num_aces: i8 = 0;
 
     for card in hand {
-        if card.rank == 0 {
+        if card.flip == false {
+            continue;
+
+        } else if card.rank == 0 {
             num_aces += 1;
 
         } else if card.rank > 9 {
