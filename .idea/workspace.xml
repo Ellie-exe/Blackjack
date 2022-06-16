@@ -12,7 +12,8 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Made input box responsive to size needs">
+    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Made dealer value properly shown now">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,7 +101,7 @@
       <workItem from="1655340734621" duration="10000" />
       <workItem from="1655340764161" duration="253000" />
       <workItem from="1655341019668" duration="3890000" />
-      <workItem from="1655392890149" duration="11984000" />
+      <workItem from="1655392890149" duration="14036000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic win detection">
       <created>1655340662709</created>
@@ -193,7 +194,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655413953463</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Made dealer value properly shown now">
+      <created>1655414467558</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1655414467558</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -223,6 +231,7 @@
     <MESSAGE value="Moved settle code to separate function" />
     <MESSAGE value="Added naturals detection" />
     <MESSAGE value="Made input box responsive to size needs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made input box responsive to size needs" />
+    <MESSAGE value="Made dealer value properly shown now" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made dealer value properly shown now" />
   </component>
 </project>

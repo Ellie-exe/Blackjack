@@ -10,6 +10,7 @@ struct Card {
 }
 
 struct State {
+    width: i8,
     bet: i32,
     balance: i32,
     deck: Vec<Card>,
@@ -18,20 +19,19 @@ struct State {
 }
 
 fn main() {
-    println!("\nWelcome to blackjack!\n");
+    println!("\n██████╗ ██╗      █████╗  █████╗ ██╗  ██╗     ██╗ █████╗  █████╗ ██╗  ██╗");
+    println!("██╔══██╗██║     ██╔══██╗██╔══██╗██║ ██╔╝     ██║██╔══██╗██╔══██╗██║ ██╔╝");
+    println!("██████╦╝██║     ███████║██║  ╚═╝█████═╝      ██║███████║██║  ╚═╝█████═╝ ");
+    println!("██╔══██╗██║     ██╔══██║██║  ██╗██╔═██╗ ██╗  ██║██╔══██║██║  ██╗██╔═██╗ ");
+    println!("██████╦╝███████╗██║  ██║╚█████╔╝██║ ╚██╗╚█████╔╝██║  ██║╚█████╔╝██║ ╚██╗");
+    println!("╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝\n");
+
     let mut balance: i32 = 0;
 
     loop {
-        print!("Bet amount? ");
-        io::stdout().flush().unwrap();
-
-        let mut bet: String = String::new();
-        io::stdin().read_line(&mut bet).unwrap();
-
-        let bet: i32 = bet.trim().parse::<i32>().unwrap();
-
         let mut state = State {
-            bet,
+            width: 73,
+            bet: 0,
             balance,
             deck: Vec::new(),
             dealer_hand: Vec::new(),
@@ -45,9 +45,22 @@ fn main() {
 
         state.dealer_hand.last_mut().unwrap().flip = false;
 
-        for _ in 0..27 {
+        for _ in 0..26 {
             println!();
         }
+
+        let table_str: String = String::new();
+        println!("{}", build_table_str(table_str, &state));
+
+        let prompt_str: String = String::from("Bet amount?");
+        print!("{}", build_prompt_str(prompt_str, &state));
+        io::stdout().flush().unwrap();
+
+        let mut bet: String = String::new();
+        io::stdin().read_line(&mut bet).unwrap();
+
+        let bet: i32 = bet.trim().parse::<i32>().unwrap();
+        state.bet = bet;
 
         loop {
             let table_str: String = String::new();
@@ -90,7 +103,7 @@ fn main() {
 
         match input.to_lowercase().chars().next().unwrap() {
             'y' => {
-                println!("\x1b[29F\x1b[0J");
+                println!("\x1b[27F\x1b[0J");
                 balance = state.balance;
             },
 
@@ -241,20 +254,22 @@ fn build_prompt_str(mut string: String, state: &State) -> String {
 
     let balance_len: i8 = state.balance.to_string().len() as i8;
     let prompt_len: i8 = prompt.len() as i8;
+    let bet_len: i8 = state.bet.to_string().len() as i8;
 
-    let width_len: i8 = get_widest_row(&state) - (18 + balance_len + prompt_len);
+    let width_len: i8 = get_widest_row(&state) - (26 + balance_len + prompt_len + bet_len);
 
     let balance_str: &str = &get_dash_str(balance_len);
     let prompt_str: &str = &get_dash_str(prompt_len);
+    let bet_str: &str = &get_dash_str(bet_len);
 
     let space_str: &str = &get_space_str(width_len);
     let dash_str: &str = &get_dash_str(width_len);
 
-    string += &format!("┌──────────{}─┬─{}──{}─┐\n", balance_str, prompt_str, dash_str);
-    string += &format!("│ Balance: {} │ {}  {} │\n", state.balance, prompt, space_str);
-    string += &format!("└──────────{}─┴─{}──{}─┘", balance_str, prompt_str, dash_str);
+    string += &format!("┌──────────{}─┬──────{}─┬─{}──{}─┐\n", balance_str, bet_str, prompt_str, dash_str);
+    string += &format!("│ Balance: {} │ Bet: {} │ {}  {} │\n", state.balance, state.bet, prompt, space_str);
+    string += &format!("└──────────{}─┴──────{}─┴─{}──{}─┘", balance_str, bet_str, prompt_str, dash_str);
 
-    string += &format!("\x1b[1F\x1b[{}C", 15 + balance_len + prompt_len);
+    string += &format!("\x1b[1F\x1b[{}C", 23 + balance_len + prompt_len + bet_len);
 
     string
 }
@@ -371,5 +386,8 @@ fn get_widest_row(state: &State) -> i8 {
     let dealer_cards: i8 = state.dealer_hand.len() as i8;
     let player_cards: i8 = state.player_hand.len() as i8;
 
-    (if player_cards > dealer_cards { player_cards } else { dealer_cards } * 14) - 1
+    let mut width: i8 = (if player_cards > dealer_cards { player_cards } else { dealer_cards } * 14) - 1;
+    if width < state.width { width = state.width; }
+
+    width
 }
