@@ -31,7 +31,7 @@ fn main() {
 
     loop {
         let mut state = State {
-            width: 79,
+            width: 78,
             bet: 0,
             balance,
             deck: Vec::new(),
@@ -88,17 +88,27 @@ fn main() {
             }
 
             match command {
-                's' => { break; },
-
                 'h' => {
                     deal(&mut state.player_hand, &mut state.deck, 1);
                     if get_hand_value(&state.player_hand) > 21 { break; }
                 },
 
-                'q' => {
-                    println!("\n");
-                    return;
+                'd' => {
+                    match get_hand_value(&state.player_hand) {
+                        9 | 10 | 11 => {
+                            state.bet *= 2;
+
+                            deal(&mut state.player_hand, &mut state.deck, 1);
+                            if get_hand_value(&state.player_hand) > 21 { break; }
+                        },
+
+                        _ => { continue; }
+                    }
                 },
+
+                's' => { break; },
+
+                'q' => { println!("\n"); return; },
 
                 _ => {}
             }
