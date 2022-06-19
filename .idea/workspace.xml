@@ -12,7 +12,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Used pattern matching for safety">
+    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
@@ -102,7 +102,8 @@
       <workItem from="1655340764161" duration="253000" />
       <workItem from="1655341019668" duration="3890000" />
       <workItem from="1655392890149" duration="16017000" />
-      <workItem from="1655598447018" duration="9057000" />
+      <workItem from="1655598447018" duration="11733000" />
+      <workItem from="1655653812479" duration="1000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic win detection">
       <created>1655340662709</created>
@@ -230,7 +231,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655606411730</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Fixed natural detection output">
+      <created>1655607624816</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1655607624816</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -265,6 +273,7 @@
     <MESSAGE value="Padded ascii art" />
     <MESSAGE value="Separated natural detection into function" />
     <MESSAGE value="Used pattern matching for safety" />
-    <option name="LAST_COMMIT_MESSAGE" value="Used pattern matching for safety" />
+    <MESSAGE value="Fixed natural detection output" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed natural detection output" />
   </component>
 </project>

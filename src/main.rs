@@ -170,8 +170,10 @@ fn check_for_naturals(state: &mut State) -> bool {
     let player_natural: bool = state.player_hand.len() == 2 && player_value == 21;
     let dealer_natural: bool = state.dealer_hand.len() == 2 && match dealer_value {
         9 | 11 => {
-            match state.dealer_hand[1].rank {
-                9 | 11 => { state.dealer_hand.last_mut().unwrap().flip = true; true },
+            let card: &mut Card = &mut state.dealer_hand[1];
+
+            match card.rank {
+                9 | 11 => { card.flip = true; true },
                 _ => { false }
             }
         },
@@ -183,13 +185,13 @@ fn check_for_naturals(state: &mut State) -> bool {
 
     match (player_natural, dealer_natural) {
         (true, false) => {
-            state.balance += state.bet + (state.bet / 2);
             prompt_str += "Win! You got a blackjack, deal again (Y/N)?";
+            state.balance += state.bet + (state.bet / 2);
         },
 
         (false, true) => {
-            state.balance -= state.bet;
             prompt_str +="Lose! The dealer got a blackjack, deal again (Y/N)?";
+            state.balance -= state.bet;
         },
 
         (true, true) => {
@@ -229,18 +231,18 @@ fn settle(state: &mut State) {
     let mut prompt_str: String = String::new();
 
     if player_value > 21 {
-        state.balance -= state.bet;
         prompt_str += "Lose! You bust, deal again (Y/N)?";
+        state.balance -= state.bet;
 
     } else if dealer_value > 21 {
-        state.balance += state.bet;
         prompt_str += "Win! The dealer busts, deal again (Y/N)?";
+        state.balance += state.bet;
 
     } else {
         match player_value.cmp(&dealer_value) {
             Ordering::Less => {
-                state.balance -= state.bet;
                 prompt_str += "Lose! Deal again (Y/N)?";
+                state.balance -= state.bet;
             },
 
             Ordering::Equal => {
@@ -248,8 +250,8 @@ fn settle(state: &mut State) {
             },
 
             Ordering::Greater => {
-                state.balance += state.bet;
                 prompt_str += "Win! Deal again (Y/N)?";
+                state.balance += state.bet;
             },
         }
     }
