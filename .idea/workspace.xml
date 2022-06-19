@@ -12,7 +12,10 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Improved cli" />
+    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,7 +101,8 @@
       <workItem from="1655340734621" duration="10000" />
       <workItem from="1655340764161" duration="253000" />
       <workItem from="1655341019668" duration="3890000" />
-      <workItem from="1655392890149" duration="14465000" />
+      <workItem from="1655392890149" duration="16017000" />
+      <workItem from="1655598447018" duration="5191000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic win detection">
       <created>1655340662709</created>
@@ -205,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655416710123</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Padded ascii art">
+      <created>1655417070458</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1655417070458</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,6 +248,7 @@
     <MESSAGE value="Made input box responsive to size needs" />
     <MESSAGE value="Made dealer value properly shown now" />
     <MESSAGE value="Improved cli" />
-    <option name="LAST_COMMIT_MESSAGE" value="Improved cli" />
+    <MESSAGE value="Padded ascii art" />
+    <option name="LAST_COMMIT_MESSAGE" value="Padded ascii art" />
   </component>
 </project>

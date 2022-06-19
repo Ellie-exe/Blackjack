@@ -2,6 +2,7 @@ use std::io;
 use std::io::Write;
 use rand::thread_rng;
 use rand::seq::SliceRandom;
+use std::cmp::Ordering;
 
 struct Card {
     rank: i8,
@@ -62,7 +63,11 @@ fn main() {
         let bet: i32 = bet.trim().parse::<i32>().unwrap();
         state.bet = bet;
 
+        let natural: bool = check_for_naturals(&mut state);
+
         loop {
+            if natural == true { break; }
+
             let table_str: String = String::new();
             println!("{}", build_table_str(table_str, &state));
 
@@ -96,7 +101,7 @@ fn main() {
             }
         }
 
-        settle(&mut state);
+        if natural == false { settle(&mut state); }
 
         let mut input: String = String::new();
         io::stdin().read_line(&mut input).unwrap();
@@ -146,79 +151,97 @@ fn deal(hand: &mut Vec<Card>, deck: &mut Vec<Card>, num_cards: i8) {
     }
 }
 
+fn check_for_naturals(state: &mut State) -> bool {
+    if state.player_hand.len() > 2 && state.dealer_hand.len() > 2 { return false; }
+
+    let player_value: i8 = get_hand_value(&state.player_hand);
+    let dealer_value: i8 = get_hand_value(&state.dealer_hand);
+
+    let player_natural: bool = state.player_hand.len() == 2 && player_value == 21;
+    let dealer_natural: bool = state.dealer_hand.len() == 2 && match dealer_value {
+        9 | 11 => {
+            match state.dealer_hand[1].rank {
+                9 | 11 => { state.dealer_hand.last_mut().unwrap().flip = true; true },
+                _ => { false }
+            }
+        },
+
+        _ => { false }
+    };
+
+    let mut prompt_str: String = String::new();
+
+    match (player_natural, dealer_natural) {
+        (true, false) => {
+            state.balance += state.bet + (state.bet / 2);
+            prompt_str += "Win! You got a blackjack, deal again (Y/N)?";
+        },
+
+        (false, true) => {
+            state.balance -= state.bet;
+            prompt_str +="Lose! The dealer got a blackjack, deal again (Y/N)?";
+        },
+
+        (true, true) => {
+            prompt_str += "Draw! Both got a blackjack, deal again (Y/N)?";
+        },
+
+        _ => { return false; }
+    }
+
+    print!("{}", build_prompt_str(prompt_str, &state));
+    io::stdout().flush().unwrap();
+
+    true
+}
+
 fn settle(state: &mut State) {
     state.dealer_hand.last_mut().unwrap().flip = true;
 
-    if get_hand_value(&state.player_hand) <= 21 {
-        while get_hand_value(&state.dealer_hand) < 17 {
+    let player_value: i8 = get_hand_value(&state.player_hand);
+    let mut dealer_value: i8 = get_hand_value(&state.dealer_hand);
+
+    if player_value <= 21 {
+        while dealer_value < 17 {
             deal(&mut state.dealer_hand, &mut state.deck, 1);
-            if get_hand_value(&state.player_hand) > 21 { break };
+            dealer_value = get_hand_value(&state.dealer_hand);
+
+            if dealer_value > 21 { break; }
         }
     }
 
     let table_str: String = String::new();
     println!("{}", build_table_str(table_str, &state));
 
-    let player_value: i8 = get_hand_value(&state.player_hand);
-    let dealer_value: i8 = get_hand_value(&state.dealer_hand);
+    let mut prompt_str: String = String::new();
 
-    let player_natural: bool = state.player_hand.len() == 2 && player_value == 21;
-    let dealer_natural: bool;
-
-    let dealer_ace_or_ten: bool = state.dealer_hand[0].rank == 0 || state.dealer_hand[0].rank == 9;
-
-    if state.dealer_hand.len() == 2 && dealer_ace_or_ten {
-        dealer_natural = state.dealer_hand.len() == 2 && player_value == 21;
-
-    } else {
-        dealer_natural = false;
-    }
-
-    if  player_natural == true && dealer_natural == false {
-        state.balance += state.bet + (state.bet / 2);
-
-        let prompt_str: String = String::from("You blackjack! Deal?");
-        print!("{}", build_prompt_str(prompt_str, &state));
-
-    } else if dealer_natural == true && player_natural == false {
+    if player_value > 21 {
         state.balance -= state.bet;
-
-        let prompt_str: String = String::from("Dealer blackjack! Deal?");
-        print!("{}", build_prompt_str(prompt_str, &state));
-
-    } else if player_natural == true && dealer_natural == true {
-        let prompt_str: String = String::from("You draw! Deal?");
-        print!("{}", build_prompt_str(prompt_str, &state));
-
-    } else if player_value > 21 {
-        state.balance -= state.bet;
-
-        let prompt_str: String = String::from("You bust! Deal?");
-        print!("{}", build_prompt_str(prompt_str, &state));
+        prompt_str += "Lose! You bust, deal again (Y/N)?";
 
     } else if dealer_value > 21 {
         state.balance += state.bet;
+        prompt_str += "Win! The dealer busts, deal again (Y/N)?";
 
-        let prompt_str: String = String::from("Dealer bust! Deal?");
-        print!("{}", build_prompt_str(prompt_str, &state));
+    } else {
+        match player_value.cmp(&dealer_value) {
+            Ordering::Less => {
+                state.balance -= state.bet;
+                prompt_str += "Lose! Deal again (Y/N)?";
+            },
 
-    } else if player_value < dealer_value {
-        state.balance -= state.bet;
+            Ordering::Equal => {
+                prompt_str += "Draw! Deal again (Y/N)?";
+            },
 
-        let prompt_str: String = String::from("You lose! Deal?");
-        print!("{}", build_prompt_str(prompt_str, &state));
-
-    } else if player_value > dealer_value {
-        state.balance += state.bet;
-
-        let prompt_str: String = String::from("You win! Deal?");
-        print!("{}", build_prompt_str(prompt_str, &state));
-
-    } else if player_value == dealer_value {
-        let prompt_str: String = String::from("You draw! Deal?");
-        print!("{}", build_prompt_str(prompt_str, &state));
+            Ordering::Greater => {
+                state.balance += state.bet;
+                prompt_str += "Win! Deal again (Y/N)?";
+            },
+        }
     }
 
+    print!("{}", build_prompt_str(prompt_str, &state));
     io::stdout().flush().unwrap();
 }
 
@@ -227,17 +250,12 @@ fn get_hand_value(hand: &Vec<Card>) -> i8 {
     let mut num_aces: i8 = 0;
 
     for card in hand {
-        if card.flip == false {
-            continue;
+        if card.flip == false { continue; }
 
-        } else if card.rank == 0 {
-            num_aces += 1;
-
-        } else if card.rank > 9 {
-            value += 10;
-
-        } else {
-            value += card.rank + 1;
+        match card.rank {
+            0 => { num_aces += 1; },
+            10 | 11 | 12 => { value += 10; },
+            _ => { value += card.rank + 1; }
         }
     }
 
