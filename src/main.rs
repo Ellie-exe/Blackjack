@@ -88,13 +88,11 @@ fn main() {
             }
 
             match command {
+                's' => { break; },
+
                 'h' => {
                     deal(&mut state.player_hand, &mut state.deck, 1);
-                    if get_hand_value(&state.player_hand) > 21 { break };
-                },
-
-                's' => {
-                    break;
+                    if get_hand_value(&state.player_hand) > 21 { break; }
                 },
 
                 'q' => {
@@ -201,6 +199,9 @@ fn check_for_naturals(state: &mut State) -> bool {
         _ => { return false; }
     }
 
+    let table_str: String = String::new();
+    println!("{}", build_table_str(table_str, &state));
+
     print!("{}", build_prompt_str(prompt_str, &state));
     io::stdout().flush().unwrap();
 
@@ -258,8 +259,8 @@ fn settle(state: &mut State) {
 }
 
 fn get_hand_value(hand: &Vec<Card>) -> i8 {
-    let mut value: i8 = 0;
     let mut num_aces: i8 = 0;
+    let mut value: i8 = 0;
 
     for card in hand {
         if card.flip == false { continue; }
@@ -272,7 +273,7 @@ fn get_hand_value(hand: &Vec<Card>) -> i8 {
     }
 
     for _ in 0..num_aces {
-        value += if value + 11 < 21 { 11 } else { 1 };
+        value += if value + 11 > 21 { 1 } else { 11 };
     }
 
     value
@@ -280,24 +281,23 @@ fn get_hand_value(hand: &Vec<Card>) -> i8 {
 
 fn build_prompt_str(mut string: String, state: &State) -> String {
     let prompt: String = string.clone();
-    string = String::from("");
 
     let balance_len: i8 = state.balance.to_string().len() as i8;
-    let prompt_len: i8 = prompt.len() as i8;
     let bet_len: i8 = state.bet.to_string().len() as i8;
+    let prompt_len: i8 = prompt.len() as i8;
 
-    let width_len: i8 = get_widest_row(&state) - (26 + balance_len + prompt_len + bet_len);
+    let width_len: i8 = get_widest_row(&state) - (24 + balance_len + prompt_len + bet_len);
 
     let balance_str: &str = &get_dash_str(balance_len);
-    let prompt_str: &str = &get_dash_str(prompt_len);
     let bet_str: &str = &get_dash_str(bet_len);
+    let prompt_str: &str = &get_dash_str(prompt_len);
 
     let space_str: &str = &get_space_str(width_len);
     let dash_str: &str = &get_dash_str(width_len);
 
-    string += &format!("┌──────────{}─┬──────{}─┬─{}──{}─┐\n", balance_str, bet_str, prompt_str, dash_str);
-    string += &format!("│ Balance: {} │ Bet: {} │ {}  {} │\n", state.balance, state.bet, prompt, space_str);
-    string += &format!("└──────────{}─┴──────{}─┴─{}──{}─┘", balance_str, bet_str, prompt_str, dash_str);
+    string  =  format!("┌──────────{}─┬──────{}─┬─{}{}─┐\n", balance_str, bet_str, prompt_str, dash_str);
+    string += &format!("│ Balance: {} │ Bet: {} │ {}{} │\n", state.balance, state.bet, prompt, space_str);
+    string += &format!("└──────────{}─┴──────{}─┴─{}{}─┘", balance_str, bet_str, prompt_str, dash_str);
 
     string += &format!("\x1b[1F\x1b[{}C", 23 + balance_len + prompt_len + bet_len);
 
