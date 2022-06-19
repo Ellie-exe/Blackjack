@@ -12,7 +12,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Fixed natural detection matching">
+    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Added doubling down">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
@@ -103,7 +103,7 @@
       <workItem from="1655341019668" duration="3890000" />
       <workItem from="1655392890149" duration="16017000" />
       <workItem from="1655598447018" duration="11733000" />
-      <workItem from="1655653812479" duration="1716000" />
+      <workItem from="1655653812479" duration="6344000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic win detection">
       <created>1655340662709</created>
@@ -245,7 +245,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655654583594</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Added doubling down">
+      <created>1655656057896</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1655656057896</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -282,6 +289,7 @@
     <MESSAGE value="Used pattern matching for safety" />
     <MESSAGE value="Fixed natural detection output" />
     <MESSAGE value="Fixed natural detection matching" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed natural detection matching" />
+    <MESSAGE value="Added doubling down" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added doubling down" />
   </component>
 </project>
