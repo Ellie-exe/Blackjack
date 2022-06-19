@@ -21,11 +21,11 @@ struct State {
 
 fn main() {
     println!("\n   ██████╗ ██╗      █████╗  █████╗ ██╗  ██╗     ██╗ █████╗  █████╗ ██╗  ██╗");
-    println!("   ██╔══██╗██║     ██╔══██╗██╔══██╗██║ ██╔╝     ██║██╔══██╗██╔══██╗██║ ██╔╝");
-    println!("   ██████╦╝██║     ███████║██║  ╚═╝█████═╝      ██║███████║██║  ╚═╝█████═╝ ");
-    println!("   ██╔══██╗██║     ██╔══██║██║  ██╗██╔═██╗ ██╗  ██║██╔══██║██║  ██╗██╔═██╗ ");
-    println!("   ██████╦╝███████╗██║  ██║╚█████╔╝██║ ╚██╗╚█████╔╝██║  ██║╚█████╔╝██║ ╚██╗");
-    println!("   ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝\n");
+    println!(  "   ██╔══██╗██║     ██╔══██╗██╔══██╗██║ ██╔╝     ██║██╔══██╗██╔══██╗██║ ██╔╝");
+    println!(  "   ██████╦╝██║     ███████║██║  ╚═╝█████═╝      ██║███████║██║  ╚═╝█████═╝ ");
+    println!(  "   ██╔══██╗██║     ██╔══██║██║  ██╗██╔═██╗ ██╗  ██║██╔══██║██║  ██╗██╔═██╗ ");
+    println!(  "   ██████╦╝███████╗██║  ██║╚█████╔╝██║ ╚██╗╚█████╔╝██║  ██║╚█████╔╝██║ ╚██╗");
+    println!(  "   ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝\n");
 
     let mut balance: i32 = 0;
 
@@ -60,8 +60,10 @@ fn main() {
         let mut bet: String = String::new();
         io::stdin().read_line(&mut bet).unwrap();
 
-        let bet: i32 = bet.trim().parse::<i32>().unwrap();
-        state.bet = bet;
+        match bet.trim().parse() {
+            Ok(value) => { state.bet = value; },
+            Err(_) => { return; }
+        }
 
         let natural: bool = check_for_naturals(&mut state);
 
@@ -71,10 +73,6 @@ fn main() {
             let table_str: String = String::new();
             println!("{}", build_table_str(table_str, &state));
 
-            if state.player_hand.len() == 2 && get_hand_value(&state.player_hand) == 21 {
-                break;
-            }
-
             let prompt_str: String = String::from(">");
             print!("{}", build_prompt_str(prompt_str, &state));
             io::stdout().flush().unwrap();
@@ -82,7 +80,14 @@ fn main() {
             let mut input: String = String::new();
             io::stdin().read_line(&mut input).unwrap();
 
-            match input.chars().next().unwrap() {
+            let command: char;
+
+            match input.to_lowercase().chars().next() {
+                Some(c) => { command = c },
+                None => { continue; }
+            }
+
+            match command {
                 'h' => {
                     deal(&mut state.player_hand, &mut state.deck, 1);
                     if get_hand_value(&state.player_hand) > 21 { break };
@@ -106,7 +111,14 @@ fn main() {
         let mut input: String = String::new();
         io::stdin().read_line(&mut input).unwrap();
 
-        match input.to_lowercase().chars().next().unwrap() {
+        let res: char;
+
+        match input.to_lowercase().chars().next() {
+            Some(c) => { res = c },
+            None => { return; }
+        }
+
+        match res {
             'y' => {
                 println!("\x1b[27F\x1b[0J");
                 balance = state.balance;
