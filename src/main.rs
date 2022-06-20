@@ -18,29 +18,10 @@ struct State {
     player_hand: Vec<Card>
 }
 
-macro_rules! print_table {
-    ($a:expr, $b:expr) => {
-        print_table($a, $b);
-    };
-}
-
-macro_rules! print_prompt {
-    ($a:expr, $b:expr) => {
-        print_prompt($a, $b);
-    };
-}
-
-macro_rules! print_header {
-    ($a:expr, $b:expr, $c:expr) => {
-        print_header($a, $b, $c);
-    };
-}
-
-macro_rules! print_cards {
-    ($a:expr, $b:expr) => {
-        print_cards($a, $b);
-    };
-}
+macro_rules! print_table { ($a:expr, $b:expr) => { print_table($a, $b); }; }
+macro_rules! print_prompt { ($a:expr, $b:expr) => { print_prompt($a, $b); }; }
+macro_rules! print_header { ($a:expr, $b:expr, $c:expr) => { print_header($a, $b, $c); }; }
+macro_rules! print_cards { ($a:expr, $b:expr) => { print_cards($a, $b); }; }
 
 fn main() {
     println!();
