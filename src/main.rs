@@ -24,6 +24,24 @@ macro_rules! print_table {
     };
 }
 
+macro_rules! print_prompt {
+    ($a:expr, $b:expr) => {
+        print_prompt($a, $b);
+    };
+}
+
+macro_rules! print_header {
+    ($a:expr, $b:expr, $c:expr) => {
+        print_header($a, $b, $c);
+    };
+}
+
+macro_rules! print_cards {
+    ($a:expr, $b:expr) => {
+        print_cards($a, $b);
+    };
+}
+
 fn main() {
     println!();
 
@@ -280,15 +298,15 @@ fn print_table(prompt: &str, state: &State) {
 
     println!("\x1b[3F\x1b[0J");
 
-    print_prompt(prompt, &state);
+    print_prompt!(prompt, &state);
 
-    print_header("Dealer's cards:", dealer_value, width);
-    print_cards(&state.dealer_hand, width);
+    print_header!("Dealer's cards:", dealer_value, width);
+    print_cards!(&state.dealer_hand, width);
 
     println!();
 
-    print_header("Player's cards:", player_value, width);
-    print_cards(&state.player_hand, width);
+    print_header!("Player's cards:", player_value, width);
+    print_cards!(&state.player_hand, width);
 
     print!("\x1b[u");
     io::stdout().flush().unwrap();
