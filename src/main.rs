@@ -11,12 +11,17 @@ struct Card {
 }
 
 struct State {
-    width: i8,
     bet: i32,
     balance: i32,
     deck: Vec<Card>,
     dealer_hand: Vec<Card>,
     player_hand: Vec<Card>
+}
+
+macro_rules! print_table {
+    ($a:expr, $b:expr) => {
+        print_table($a, $b);
+    };
 }
 
 fn main() {
@@ -29,15 +34,12 @@ fn main() {
     println!("   ██████╦╝███████╗██║  ██║╚█████╔╝██║ ╚██╗╚█████╔╝██║  ██║╚█████╔╝██║ ╚██╗");
     println!("   ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝");
 
-    for _ in 0..3 {
-        println!();
-    }
+    println!("\n\n");
 
     let mut balance: i32 = 0;
 
     loop {
         let mut state = State {
-            width: 78,
             bet: 0,
             balance,
             deck: Vec::new(),
@@ -52,10 +54,7 @@ fn main() {
 
         state.dealer_hand.last_mut().unwrap().flip = false;
 
-        let table_str: String = String::from("Bet amount?");
-        print!("{}", build_table_str(table_str, &state));
-        io::stdout().flush().unwrap();
-
+        print_table!("Bet amount?", &state);
         let mut bet: String = String::new();
         io::stdin().read_line(&mut bet).unwrap();
 
@@ -69,17 +68,14 @@ fn main() {
         loop {
             if natural == true { break; }
 
-            let table_str: String = String::from(">");
-            print!("{}", build_table_str(table_str, &state));
-            io::stdout().flush().unwrap();
-
+            print_table!(">", &state);
             let mut input: String = String::new();
             io::stdin().read_line(&mut input).unwrap();
 
             let command: char;
 
             match input.to_lowercase().chars().next() {
-                Some(c) => { command = c },
+                Some(c) => { command = c; },
                 None => { continue; }
             }
 
@@ -118,7 +114,7 @@ fn main() {
         let res: char;
 
         match input.to_lowercase().chars().next() {
-            Some(c) => { res = c },
+            Some(c) => { res = c; },
             None => { return; }
         }
 
@@ -153,15 +149,13 @@ fn initialize_deck(deck: &mut Vec<Card>) {
 
 fn deal(hand: &mut Vec<Card>, deck: &mut Vec<Card>, num_cards: i8) {
     for _ in 0..num_cards {
-        let card_option: Option<Card> = deck.pop();
-
-        match card_option {
+        match deck.pop() {
             Some(mut card) => {
                 card.flip = true;
                 hand.push(card);
             },
 
-            None => return
+            None => { return; }
         }
     }
 }
@@ -186,28 +180,27 @@ fn check_for_naturals(state: &mut State) -> bool {
         _ => { false }
     };
 
-    let mut table_str: String = String::new();
+    let prompt: &str;
 
     match (player_natural, dealer_natural) {
         (true, false) => {
-            table_str += "Win! You got a blackjack, deal again (Y/N)?";
+            prompt = "Win! You got a blackjack, deal again (Y/N)?";
             state.balance += state.bet + (state.bet / 2);
         },
 
         (false, true) => {
-            table_str +="Lose! The dealer got a blackjack, deal again (Y/N)?";
+            prompt ="Lose! The dealer got a blackjack, deal again (Y/N)?";
             state.balance -= state.bet;
         },
 
         (true, true) => {
-            table_str += "Draw! Both got a blackjack, deal again (Y/N)?";
+            prompt = "Draw! Both got a blackjack, deal again (Y/N)?";
         },
 
         _ => { return false; }
     }
 
-    print!("{}", build_table_str(table_str, &state));
-    io::stdout().flush().unwrap();
+    print_table!(prompt, &state);
 
     true
 }
@@ -227,36 +220,35 @@ fn settle(state: &mut State) {
         }
     }
 
-    let mut table_str: String = String::new();
+    let prompt: &str;
 
     if player_value > 21 {
-        table_str += "Lose! You bust, deal again (Y/N)?";
+        prompt = "Lose! You bust, deal again (Y/N)?";
         state.balance -= state.bet;
 
     } else if dealer_value > 21 {
-        table_str += "Win! The dealer busts, deal again (Y/N)?";
+        prompt = "Win! The dealer busts, deal again (Y/N)?";
         state.balance += state.bet;
 
     } else {
         match player_value.cmp(&dealer_value) {
             Ordering::Less => {
-                table_str += "Lose! Deal again (Y/N)?";
+                prompt = "Lose! Deal again (Y/N)?";
                 state.balance -= state.bet;
             },
 
             Ordering::Equal => {
-                table_str += "Draw! Deal again (Y/N)?";
+                prompt = "Draw! Deal again (Y/N)?";
             },
 
             Ordering::Greater => {
-                table_str += "Win! Deal again (Y/N)?";
+                prompt = "Win! Deal again (Y/N)?";
                 state.balance += state.bet;
             },
         }
     }
 
-    print!("{}", build_table_str(table_str, &state));
-    io::stdout().flush().unwrap();
+    print_table!(prompt, &state);
 }
 
 fn get_hand_value(hand: &Vec<Card>) -> i8 {
@@ -280,126 +272,125 @@ fn get_hand_value(hand: &Vec<Card>) -> i8 {
     value
 }
 
-fn build_table_str(mut string: String, state: &State) -> String {
-    let prompt: String = string.clone();
-
-    let width: i8 = get_widest_row(&state);
+fn print_table(prompt: &str, state: &State) {
+    let width: i8 = get_width(&state);
 
     let dealer_value: i8 = get_hand_value(&state.dealer_hand);
     let player_value: i8 = get_hand_value(&state.player_hand);
 
-    string = String::from("\x1b[2F\x1b[0J");
+    println!("\x1b[3F\x1b[0J");
 
-    string = build_prompt_str(string, prompt, &state);
+    print_prompt(prompt, &state);
 
-    string += "\x1b[s\x1b[3E";
+    print_header("Dealer's cards:", dealer_value, width);
+    print_cards(&state.dealer_hand, width);
 
-    string = build_header_str(string, width, "Dealer's cards:");
-    string = build_header_str(string, width, &format!("Value = {}", dealer_value));
-    string = build_card_str(string, width, &state.dealer_hand);
+    println!();
 
-    string += "\n";
+    print_header("Player's cards:", player_value, width);
+    print_cards(&state.player_hand, width);
 
-    string = build_header_str(string, width, "Player's cards:");
-    string = build_header_str(string, width, &format!("Value = {}", player_value));
-    string = build_card_str(string, width, &state.player_hand);
-
-    string += "\x1b[u";
-
-    string
+    print!("\x1b[u");
+    io::stdout().flush().unwrap();
 }
 
-fn build_prompt_str(mut string: String, prompt: String, state: &State) -> String {
+fn print_prompt(prompt: &str, state: &State) {
     let balance_len: i8 = state.balance.to_string().len() as i8;
     let bet_len: i8 = state.bet.to_string().len() as i8;
     let prompt_len: i8 = prompt.len() as i8;
 
-    let width_len: i8 = get_widest_row(&state) - (24 + balance_len + prompt_len + bet_len);
+    let width_len: i8 = get_width(&state) - (24 + balance_len + prompt_len + bet_len);
 
-    let balance_str: &str = &get_dash_str(balance_len);
-    let bet_str: &str = &get_dash_str(bet_len);
-    let prompt_str: &str = &get_dash_str(prompt_len);
+    let balance_str: &str = &gen_dashes(balance_len);
+    let bet_str: &str = &gen_dashes(bet_len);
+    let prompt_str: &str = &gen_dashes(prompt_len);
 
-    let space_str: &str = &get_space_str(width_len);
-    let dash_str: &str = &get_dash_str(width_len);
+    let space_str: &str = &gen_spaces(width_len);
+    let dash_str: &str = &gen_dashes(width_len);
 
-    string += &format!("┌──────────{}─┬──────{}─┬─{}{}─┐\n", balance_str, bet_str, prompt_str, dash_str);
-    string += &format!("│ Balance: {} │ Bet: {} │ {}{} │\n", state.balance, state.bet, prompt, space_str);
-    string += &format!("└──────────{}─┴──────{}─┴─{}{}─┘", balance_str, bet_str, prompt_str, dash_str);
+    println!("┌──────────{}─┬──────{}─┬─{}{}─┐", balance_str, bet_str, prompt_str, dash_str);
+    println!("│ Balance: {} │ Bet: {} │ {}{} │", state.balance, state.bet, prompt, space_str);
+    println!("└──────────{}─┴──────{}─┴─{}{}─┘", balance_str, bet_str, prompt_str, dash_str);
 
-    string += &format!("\x1b[1F\x1b[{}C", 23 + balance_len + prompt_len + bet_len);
-
-    string
+    println!("\x1b[2F\x1b[{}C\x1b[s\x1b[2E", 23 + balance_len + prompt_len + bet_len);
 }
 
-fn build_header_str(mut string: String, width: i8, header: &str) -> String {
-    string += &get_space_str((width - header.len() as i8) / 2);
-    string += header;
-    string += "\n";
+fn print_header(header: &str, hand_value: i8, width: i8) {
+    let value: String = format!("Value = {}", hand_value);
 
-    string
+    let header_spaces: String = gen_spaces((width - header.len() as i8) / 2);
+    let value_spaces: String = gen_spaces((width - value.len() as i8) / 2);
+
+    println!("{}{}", header_spaces, header);
+    println!("{}{}", value_spaces, value);
 }
 
-fn build_card_str(mut string: String, width: i8, hand: &Vec<Card>) -> String {
+fn print_cards(hand: &Vec<Card>, width: i8) {
     let cards_width: i8 = (hand.len() as i8 * 14) - 1;
+    let cards: Vec<[String; 9]> = gen_card_strings(hand);
 
     for row in 0..9 {
-        string += &get_space_str((width - cards_width) / 2);
+        let mut string: String = gen_spaces((width - cards_width) / 2);
 
-        for card in hand {
-            string = build_card_row_str(string, card, row);
-            string += " ";
+        for card in &cards {
+            string += &card[row];
+
+            if cards.ends_with(&[card.clone()]) == false {
+                string += " ";
+            }
         }
 
-        string += "\n";
+        println!("{}", string);
     }
-
-    string
 }
 
-fn build_card_row_str(mut string: String, card: &Card, row: usize) -> String {
-    const NEW_STRING: String = String::new();
-    let mut card_str: [String; 9] = [NEW_STRING; 9];
+fn gen_card_strings(hand: &Vec<Card>) -> Vec<[String; 9]> {
+    const RANKS: [&str; 13] = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+    const SUITS: [&str; 4] = ["♥", "♦", "♠", "♣"];
+    const STRING: String = String::new();
 
-    card_str[0] = String::from("┌───────────┐");
-    card_str[8] = String::from("└───────────┘");
+    let mut cards: Vec<[String; 9]> = Vec::new();
 
-    if card.flip == true {
-        const RANKS: [&str; 13] = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-        const SUITS: [&str; 4] = ["♥", "♦", "♠", "♣"];
+    for card in hand {
+        let mut card_str: [String; 9] = [STRING; 9];
 
-        let rank: &str = RANKS[card.rank as usize];
-        let suit: &str = SUITS[card.suit as usize];
+        card_str[0] = String::from("┌───────────┐");
+        card_str[8] = String::from("└───────────┘");
 
-        let color: &str = if card.suit < 2 { "\x1b[1;31m" } else { "\x1b[1;90m" };
-        let reset: &str = "\x1b[0m";
+        if card.flip == true {
+            let color: &str = if card.suit < 2 { "\x1b[1;31m" } else { "\x1b[1;90m" };
+            let reset: &str = "\x1b[0m";
 
-        let top_rank_formatted: String = format!("{} ", rank);
-        let bottom_rank_formatted: String = format!(" {}", rank);
+            let rank: &str = RANKS[card.rank as usize];
+            let suit: &str = SUITS[card.suit as usize];
 
-        let top_rank: &str = if card.rank == 9 { rank } else { &top_rank_formatted };
-        let bottom_rank: &str = if card.rank == 9 { rank } else { &bottom_rank_formatted };
+            let formatted_top_rank: String = format!("{} ", rank);
+            let formatted_bottom_rank: String = format!(" {}", rank);
 
-        card_str[1] = format!("│ {}{}      {}{} │", color, top_rank, suit, reset);
-        card_str[2] = format!("│ {}         {} │", color, reset);
-        card_str[3] = format!("│ {}         {} │", color, reset);
-        card_str[4] = format!("│ {}    {}    {} │", color, suit, reset);
-        card_str[5] = format!("│ {}         {} │", color, reset);
-        card_str[6] = format!("│ {}         {} │", color, reset);
-        card_str[7] = format!("│ {}{}      {}{} │", color, suit, bottom_rank, reset);
+            let top_rank: &str = if card.rank == 9 { rank } else { &formatted_top_rank };
+            let bottom_rank: &str = if card.rank == 9 { rank } else { &formatted_bottom_rank };
 
-    } else if card.flip == false {
-        for i in 1..8 {
-            card_str[i] = String::from("│ ░░░░░░░░░ │");
+            card_str[1] = format!("│ {}{}      {}{} │", color, top_rank, suit, reset);
+            card_str[2] = format!("│ {}         {} │", color, reset);
+            card_str[3] = format!("│ {}         {} │", color, reset);
+            card_str[4] = format!("│ {}    {}    {} │", color, suit, reset);
+            card_str[5] = format!("│ {}         {} │", color, reset);
+            card_str[6] = format!("│ {}         {} │", color, reset);
+            card_str[7] = format!("│ {}{}      {}{} │", color, suit, bottom_rank, reset);
+
+        } else if card.flip == false {
+            for i in 1..8 {
+                card_str[i] = String::from("│ ░░░░░░░░░ │");
+            }
         }
+
+        cards.push(card_str);
     }
 
-    string += &card_str[row];
-
-    string
+    cards
 }
 
-fn get_space_str(num: i8) -> String {
+fn gen_spaces(num: i8) -> String {
     let mut string: String = String::new();
 
     for _ in 0..num {
@@ -409,7 +400,7 @@ fn get_space_str(num: i8) -> String {
     string
 }
 
-fn get_dash_str(num: i8) -> String {
+fn gen_dashes(num: i8) -> String {
     let mut string: String = String::new();
 
     for _ in 0..num {
@@ -419,12 +410,12 @@ fn get_dash_str(num: i8) -> String {
     string
 }
 
-fn get_widest_row(state: &State) -> i8 {
+fn get_width(state: &State) -> i8 {
     let dealer_cards: i8 = state.dealer_hand.len() as i8;
     let player_cards: i8 = state.player_hand.len() as i8;
 
-    let mut width: i8 = (if player_cards > dealer_cards { player_cards } else { dealer_cards } * 14) - 1;
-    if width < state.width { width = state.width; }
+    let cards: i8 = if player_cards > dealer_cards { player_cards } else { dealer_cards };
 
-    width
+    let width: i8 = (cards * 14) - 1;
+    if width > 78 { width } else { 78 }
 }
