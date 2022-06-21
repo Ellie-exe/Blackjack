@@ -79,30 +79,22 @@ fn main() {
             }
 
             match command {
-                'h' => {
-                    deal(&mut state.player_hand, &mut state.deck, 1);
-                    if get_hand_value(&state.player_hand) > 21 { break; }
-                },
-
                 'd' => {
                     match get_hand_value(&state.player_hand) {
-                        9 | 10 | 11 => {
-                            state.bet *= 2;
-
-                            deal(&mut state.player_hand, &mut state.deck, 1);
-                            if get_hand_value(&state.player_hand) > 21 { break; }
-                        },
-
+                        9 | 10 | 11 => { state.bet *= 2; },
                         _ => { continue; }
                     }
                 },
 
-                's' => { break; },
-
                 'q' => { println!("\n"); return; },
+                's' => { break; },
+                'h' => {},
 
-                _ => {}
+                _ => { continue; }
             }
+
+            deal(&mut state.player_hand, &mut state.deck, 1);
+            if get_hand_value(&state.player_hand) > 21 { break; }
         }
 
         if natural == false { settle(&mut state); }
@@ -110,22 +102,15 @@ fn main() {
         let mut input: String = String::new();
         io::stdin().read_line(&mut input).unwrap();
 
-        let res: char;
-
         match input.to_lowercase().chars().next() {
-            Some(c) => { res = c; },
-            None => { return; }
-        }
-
-        match res {
-            'y' => {
-                balance = state.balance;
+            Some(c) => {
+                match c {
+                    'y' => { balance = state.balance; },
+                    _ => { println!("\x1b[25E"); return; }
+                }
             },
 
-            _ => {
-                println!("\x1b[25E");
-                return;
-            }
+            None => { return; }
         }
     }
 }
