@@ -31,7 +31,7 @@ fn main() {
     println!("   ██████╦╝██║     ███████║██║  ╚═╝█████═╝      ██║███████║██║  ╚═╝█████═╝ ");
     println!("   ██╔══██╗██║     ██╔══██║██║  ██╗██╔═██╗ ██╗  ██║██╔══██║██║  ██╗██╔═██╗ ");
     println!("   ██████╦╝███████╗██║  ██║╚█████╔╝██║ ╚██╗╚█████╔╝██║  ██║╚█████╔╝██║ ╚██╗");
-    println!("   ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝");
+    println!("   ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝  H");
 
     println!("\n\n");
 
@@ -53,7 +53,7 @@ fn main() {
 
         state.dealer_hand.last_mut().unwrap().flip = false;
 
-        print_table!("Bet amount?", &state);
+        print_table!("Bet amount? ", &state);
         let mut bet: String = String::new();
         io::stdin().read_line(&mut bet).unwrap();
 
@@ -67,7 +67,7 @@ fn main() {
         loop {
             if natural == true { break; }
 
-            print_table!(">", &state);
+            print_table!("> ", &state);
             let mut input: String = String::new();
             io::stdin().read_line(&mut input).unwrap();
 
@@ -168,17 +168,17 @@ fn check_for_naturals(state: &mut State) -> bool {
 
     match (player_natural, dealer_natural) {
         (true, false) => {
-            prompt = "Win! You got a blackjack, deal again (Y/N)?";
+            prompt = "Win! You got a blackjack, deal again (Y/N)? ";
             state.balance += state.bet + (state.bet / 2);
         },
 
         (false, true) => {
-            prompt ="Lose! The dealer got a blackjack, deal again (Y/N)?";
+            prompt ="Lose! The dealer got a blackjack, deal again (Y/N)? ";
             state.balance -= state.bet;
         },
 
         (true, true) => {
-            prompt = "Draw! Both got a blackjack, deal again (Y/N)?";
+            prompt = "Draw! Both got a blackjack, deal again (Y/N)? ";
         },
 
         _ => { return false; }
@@ -207,26 +207,26 @@ fn settle(state: &mut State) {
     let prompt: &str;
 
     if player_value > 21 {
-        prompt = "Lose! You bust, deal again (Y/N)?";
+        prompt = "Lose! You bust, deal again (Y/N)? ";
         state.balance -= state.bet;
 
     } else if dealer_value > 21 {
-        prompt = "Win! The dealer busts, deal again (Y/N)?";
+        prompt = "Win! The dealer busts, deal again (Y/N)? ";
         state.balance += state.bet;
 
     } else {
         match player_value.cmp(&dealer_value) {
             Ordering::Less => {
-                prompt = "Lose! Deal again (Y/N)?";
+                prompt = "Lose! Deal again (Y/N)? ";
                 state.balance -= state.bet;
             },
 
             Ordering::Equal => {
-                prompt = "Draw! Deal again (Y/N)?";
+                prompt = "Draw! Deal again (Y/N)? ";
             },
 
             Ordering::Greater => {
-                prompt = "Win! Deal again (Y/N)?";
+                prompt = "Win! Deal again (Y/N)? ";
                 state.balance += state.bet;
             },
         }
@@ -283,7 +283,8 @@ fn print_prompt(prompt: &str, state: &State) {
     let bet_len: i8 = state.bet.to_string().len() as i8;
     let prompt_len: i8 = prompt.len() as i8;
 
-    let width_len: i8 = get_width(&state) - (24 + balance_len + prompt_len + bet_len);
+    let offset: i8 = 24 + balance_len + bet_len + prompt_len;
+    let width_len: i8 = get_width(&state) - offset;
 
     let balance_str: &str = &gen_dashes(balance_len);
     let bet_str: &str = &gen_dashes(bet_len);
@@ -296,7 +297,7 @@ fn print_prompt(prompt: &str, state: &State) {
     println!("│ Balance: {} │ Bet: {} │ {}{} │", state.balance, state.bet, prompt, space_str);
     println!("└──────────{}─┴──────{}─┴─{}{}─┘", balance_str, bet_str, prompt_str, dash_str);
 
-    println!("\x1b[2F\x1b[{}C\x1b[s\x1b[2E", 23 + balance_len + prompt_len + bet_len);
+    println!("\x1b[2F\x1b[{}C\x1b[s\x1b[2E", offset - 2);
 }
 
 fn print_header(header: &str, hand_value: i8, width: i8) {

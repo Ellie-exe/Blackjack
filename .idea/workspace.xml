@@ -12,7 +12,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="">
+    <list default="true" id="f7be9626-a6a0-4392-89cb-76263ef8fed0" name="Changes" comment="Improved readability">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
@@ -106,7 +106,7 @@
       <workItem from="1655598447018" duration="11733000" />
       <workItem from="1655653812479" duration="7240000" />
       <workItem from="1655753974010" duration="14151000" />
-      <workItem from="1655830317570" duration="1455000" />
+      <workItem from="1655830317570" duration="3335000" />
     </task>
     <task id="LOCAL-00001" summary="Added basic win detection">
       <created>1655340662709</created>
@@ -283,7 +283,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655768008473</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Improved readability">
+      <created>1655832077927</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1655832077927</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -325,7 +332,8 @@
     <MESSAGE value="Reformatted print table function" />
     <MESSAGE value="Added more macros" />
     <MESSAGE value="Made code more concise" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made code more concise" />
+    <MESSAGE value="Improved readability" />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved readability" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
