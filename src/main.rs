@@ -192,6 +192,8 @@ fn check_for_naturals(state: &mut State) -> bool {
 fn settle(state: &mut State) {
     state.dealer_hand.last_mut().unwrap().flip = true;
 
+    print_table!("> ", &state);
+
     let player_value: i8 = get_hand_value(&state.player_hand);
     let mut dealer_value: i8 = get_hand_value(&state.dealer_hand);
 
@@ -199,6 +201,8 @@ fn settle(state: &mut State) {
         while dealer_value < 17 {
             deal(&mut state.dealer_hand, &mut state.deck, 1);
             dealer_value = get_hand_value(&state.dealer_hand);
+
+            print_table!("> ", &state);
 
             if dealer_value > 21 { break; }
         }
