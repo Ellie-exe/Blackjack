@@ -266,6 +266,8 @@ fn print_table(prompt: &str, state: &State) {
     let dealer_value: i8 = get_hand_value(&state.dealer_hand);
     let player_value: i8 = get_hand_value(&state.player_hand);
 
+    // TODO: give it the ansi treatment
+
     println!("\x1b[3F\x1b[0J");
 
     print_prompt!(prompt, &state);
